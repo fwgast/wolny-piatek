@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK
+from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK, EXE_PATH
 import csv
 import sys, os, subprocess
 from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QLabel, QPushButton, QWidget, QFileDialog, QMessageBox, QVBoxLayout
@@ -7,7 +7,6 @@ from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from pandas import read_excel
 import openpyxl
-
 def get_application_path():
     if getattr(sys, 'frozen', False):
         return os.path.dirname(sys.executable)
@@ -256,8 +255,12 @@ class EmailAutomationApp(QMainWindow):
     def on_finished(self):
         self.loading_screen.close()
         QMessageBox.information(self, "Completed", "Emails processed successfully!")
-        set_environment_variable('wolny_piatek_csv_file', os.path.join(get_application_path(), 'missing_documents.csv'))
+        envvar_path = os.path.join(get_application_path(), 'missing_documents.csv')
+        set_environment_variable('wolny_piatek_csv_file', envvar_path)
         #webbrowser.open(PA_LINK)           #only on premium -_-
+        subprocess.run([EXE_PATH])
+
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -24,7 +24,7 @@ witam, jesli ktos to czyta to wspolxzuje w chuj, bo to znaczy ze cos nie dziala,
 \
 update: mea culpa, przez miscommunication wyszło ze po lewej jest jeszcze jedna kolumna z imieniem i nazwiskiem, w najnowszej wersji apka dziala niezalezie od tego czy w excelu jest ta kolumna czy nie
 
-
+- path do execa odpalajacego power automate
 - Link z Power Automate: (w przeplywie -> info, tam gdzies powinien byc link podobny do tego):
 
 ```
@@ -65,7 +65,7 @@ Od teraz kod powinien sie uruchamiac :))
 
 ### Struktura plikow
 - generalnie caly kod ktory cos robi jest w pliku 'Wolny Piatek v3.py', wiem ze nie powinno tak byc ale to jest moj kod i chuj mnnie obchodza konsekwencje
-- zeby kod zadziałał musi byc jeszcze plik config.py w ktorym znajduja sie zmienne: MAIL_BODY_SENSITIVE_DATA, PA_LINK, SUBJECT, SENDER, FOOTER, ktorych nie ma na githubie z przyczyn oczywistych (dane osobowe, numer telefonu itd), jesli nie wiesz co ma byc w tych zmiennych to pytania kierowac do sami wiecie kogo, nie do mnie
+- zeby kod zadziałał musi byc jeszcze plik config.py w ktorym znajduja sie zmienne: MAIL_BODY_SENSITIVE_DATA, PA_LINK, EXE_PATH, SUBJECT, SENDER, FOOTER, ktorych nie ma na githubie z przyczyn oczywistych (dane osobowe, numer telefonu itd), jesli nie wiesz co ma byc w tych zmiennych to pytania kierowac do sami wiecie kogo, nie do mnie
 - przed plikami warto dodawac: poniewaz czasem sie pierdola polskie znaki ale to wina raczej Outlooka niz pythona
 *   ```python
     # -*- coding: utf-8 -*-
