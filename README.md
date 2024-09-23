@@ -20,7 +20,7 @@ witam, jesli ktos to czyta to wspolxzuje w chuj, bo to znaczy ze cos nie dziala,
 ## Wymagania
 - \>50 iq (wymog konieczny)
 - Plik excel w formacie:  (kolory i wielkosc liter nie maja znaczenia, wazne tylko zeby gdy dostarczono dokument to bylo Y/y/T/t a gdy nie dostarczono N/n)
-![alt text](https://github.com/fwgast/wolny-piatek/blob/main/additional/excel2.png?raw=true)
+![alt text](https://github.com/fwgast/wolny-piatek/blob/main/additonal/excel2.png)
 \
 update: mea culpa, przez miscommunication wyszło ze po lewej jest jeszcze jedna kolumna z imieniem i nazwiskiem, w najnowszej wersji apka dziala niezalezie od tego czy w excelu jest ta kolumna czy nie
 
