@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QLabel, QPus
 from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from pandas import read_excel
-
+import openpyxl
 
 def get_application_path():
     if getattr(sys, 'frozen', False):
@@ -28,9 +28,9 @@ class LoadingScreen(QWidget):
         super().__init__()
         self.setWindowTitle("Loading...")
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowIcon(QIcon(resource_path('additonal\icon.ico')))
+        self.setWindowIcon(QIcon(resource_path('icon.ico')))
         self.loading_label = QLabel(self)
-        self.movie = QMovie(resource_path('additonal\icon.ico'))
+        self.movie = QMovie(resource_path('dance.gif'))
 
         self.loading_label.setMovie(self.movie)
 
@@ -158,7 +158,7 @@ class EmailAutomationApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Wolny Piątek")
-        self.setWindowIcon(QIcon(resource_path('additonal\icon.ico')))
+        self.setWindowIcon(QIcon(resource_path('icon.ico')))
         self.setGeometry(100, 100, 600, 400)
 
         self.file_path = ""
