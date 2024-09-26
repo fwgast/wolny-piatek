@@ -1,6 +1,7 @@
 config.py
 test.py
 .venv/
+dane_testowe/
 .venv
 __pycache__
 missing_documents.csv

@@ -24,22 +24,21 @@ witam, jesli ktos to czyta to wspolxzuje w chuj, bo to znaczy ze cos nie dziala,
 \
 update: mea culpa, przez miscommunication wyszło ze po lewej jest jeszcze jedna kolumna z imieniem i nazwiskiem, w najnowszej wersji apka dziala niezalezie od tego czy w excelu jest ta kolumna czy nie
 
-- path do execa odpalajacego power automate
 - Link z Power Automate: (w przeplywie -> info, tam gdzies powinien byc link podobny do tego):
 
 ```
 ms-powerautomate:/console/flow/run?environmentid=Default-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX&workflowid=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX&source=Other
 ```
-update: link jest nie potrzebny bo to funkcja premium :clown_face: :clown_face: , uzytkownicy musza odpalac Power Automate z palca :upside_down_face:
+update: link jest nie potrzebny bo to funkcja premium :clown_face:
 
 ## Krotki opis dzialania (TL;DR)
 * apka pobiera dane z excela 
 * przetwarza je
 * tworzy plik csv, ktory bedzie uzywal power automate 
-* triggeruje flow na power automate
+* otwiera power automate
+* nawiguje do GUI
+* odpala flow na power automate
 * power automate wysyla maile bazujac na pliku csv (plik csv uzywa niestandardowego delimitera `, bo inaczej stopki sie pierdola)
-
-update: nie triggeruje bo to funkcja premium :clown_face: :clown_face:
 
 ## Debugowanie / uzywanie / "kompilacja"
 
@@ -109,22 +108,22 @@ otoz moi drodzy:
 
 ## Adnotacje koncowe, uwagi
 * Szczegoly flow w folderze power_automate
+* flow musi byc pierwsze od góry
+* jesli kiedys zmieni sie GUI power automate to pewnie sie wszystko wywali
 * Jesli cos instalowales/as to na koniec:
 ```powershell
 pip freeze > requirements.txt
 ```
 * Plik CSV uzywa niestandardowego delimitera "`" bo inaczej stopki sie psują, trzeba to tez zmienic na power automate'cie
 * Jesli po kliknieciu Send Mails przez usera, wystepuje lag, to normalne bo windows dlugo ustawia zmienne srodowiskowe
-* trzeba pamietac o zrobieniu pliku config.py jak bylo napisane wyzej + dodac w nim:
-```python
-from os import getenv
-```
+* trzeba uzupełnic config_template.py i zmienic nazwe na config.py
 * jesli kiedykolwiek trigerowanie flow przez link byłoby za darmo, nalezy:
 1. odkomentowac tę linie:
 ```python
 #webbrowser.open(PA_LINK)           #only on premium -_-
 ```
-2. odrobine zmienic manual
+2. zakomentowac nastepne linie 
+3. odrobine zmienic manual
 
 ## Raportowanie bledow, zglaszanie reklamacji itd.
 ze wszystkimi zazaleniami prosze pisac na:

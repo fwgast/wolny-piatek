@@ -257,14 +257,6 @@ class EmailAutomationApp(QMainWindow):
         value = max(0, min(100, value))
         self.loading_screen.set_progress(value)
 
-    def live_mouse_position(self, duration=10):
-        print(f"Śledzę pozycję kursora przez {duration} sekund.")
-        start_time = time.time()
-        
-        while time.time() - start_time < duration:
-            x, y = pyautogui.position()
-            print(f"Pozycja kursora: x = {x}, y = {y}")
-            time.sleep(0.5)
 
     def power_automate(self):
         subprocess.Popen(EXE_PATH)
@@ -286,7 +278,8 @@ class EmailAutomationApp(QMainWindow):
 
     def kill_power_automate(self):
         try:
-            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+            print('killing')
+            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"], check=True)
         except subprocess.CalledProcessError:
             pass
 
