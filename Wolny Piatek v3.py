@@ -7,6 +7,11 @@ from PyQt5.QtGui import QIcon, QMovie
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from pandas import read_excel
 import openpyxl
+import pygetwindow as gw
+import pyautogui
+import time
+
+
 def get_application_path():
     if getattr(sys, 'frozen', False):
         return os.path.dirname(sys.executable)
@@ -252,14 +257,55 @@ class EmailAutomationApp(QMainWindow):
         value = max(0, min(100, value))
         self.loading_screen.set_progress(value)
 
+    def live_mouse_position(self, duration=10):
+        print(f"Śledzę pozycję kursora przez {duration} sekund.")
+        start_time = time.time()
+        
+        while time.time() - start_time < duration:
+            x, y = pyautogui.position()
+            print(f"Pozycja kursora: x = {x}, y = {y}")
+            time.sleep(0.5)
+
+    def power_automate(self):
+        subprocess.Popen(EXE_PATH)
+        while True:
+            try:
+                window = gw.getWindowsWithTitle('Power Automate')[0]
+                break
+            except IndexError:
+                time.sleep(0.2)
+   
+        window.resizeTo(200, 200)
+        window.activate()
+        time.sleep(10)
+        pyautogui.click(window.left + 233, window.top + 148)
+        time.sleep(1)
+        pyautogui.click(window.left + 252, window.top + 293)
+        time.sleep(0.5)
+        pyautogui.click(window.left + 252, window.top + 293)
+
+    def kill_power_automate(self):
+        try:
+            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+        except subprocess.CalledProcessError:
+            pass
+
+    def wait_until_flow_ends(self):
+        while True:
+            if not os.path.isfile(os.environ.get('wolny_piatek_csv_file')):
+                break
+            time.sleep(0.5)
+
     def on_finished(self):
         self.loading_screen.close()
         QMessageBox.information(self, "Completed", "Emails processed successfully!")
         envvar_path = os.path.join(get_application_path(), 'missing_documents.csv')
         set_environment_variable('wolny_piatek_csv_file', envvar_path)
         #webbrowser.open(PA_LINK)           #only on premium -_-
-        subprocess.run([EXE_PATH])
-
+        self.kill_power_automate()
+        self.power_automate()
+        self.wait_until_flow_ends()
+        self.kill_power_automate()
 
 
 if __name__ == '__main__':
@@ -267,3 +313,4 @@ if __name__ == '__main__':
     ex = EmailAutomationApp()
     ex.show()
     sys.exit(app.exec_())
+
