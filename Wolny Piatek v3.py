@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK, EXE_PATH
+from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK
 import csv
 import sys, os, subprocess
 from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QLabel, QPushButton, QWidget, QFileDialog, QMessageBox, QVBoxLayout
@@ -10,7 +10,14 @@ import openpyxl
 import pygetwindow as gw
 import pyautogui
 import time
+import logging, glob
+logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
+power_automate_path = os.path.join(os.environ['ProgramFiles'], 'WindowsApps', 'Microsoft.PowerAutomateDesktop_*', 'PAD.Console.Host.exe')
+EXE_PATH = glob.glob(power_automate_path)
+print(EXE_PATH)
+logging.debug(os.environ['ProgramFiles'])
+logging.debug(os.path.join(os.environ['ProgramFiles'], 'WindowsApps', 'Microsoft.PowerAutomateDesktop_*', 'PAD.Console.Host.exe'))
 
 def get_application_path():
     if getattr(sys, 'frozen', False):
@@ -259,14 +266,24 @@ class EmailAutomationApp(QMainWindow):
 
 
     def power_automate(self):
-        subprocess.Popen(EXE_PATH)
+        logging.debug('wlaczanie')
+        try:
+            logging.debug(EXE_PATH)
+            subprocess.Popen(EXE_PATH)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"An error occurred while starting the process: {e}")
+
+        logging.debug('wlaczone')
+
         while True:
             try:
                 window = gw.getWindowsWithTitle('Power Automate')[0]
                 break
             except IndexError:
                 time.sleep(0.2)
-   
+
+        logging.debug('zaraz resize')
+
         window.resizeTo(200, 200)
         window.activate()
         time.sleep(10)
@@ -277,10 +294,10 @@ class EmailAutomationApp(QMainWindow):
         pyautogui.click(window.left + 252, window.top + 293)
 
     def kill_power_automate(self):
+        logging.debug('kill')
         try:
-            print('killing')
-            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"], check=True)
-        except subprocess.CalledProcessError:
+            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True)
+        except Exception:
             pass
 
     def wait_until_flow_ends(self):
