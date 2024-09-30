@@ -30,13 +30,14 @@ update: mea culpa, przez miscommunication wyszło ze po lewej jest jeszcze jedna
 ms-powerautomate:/console/flow/run?environmentid=Default-XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX&workflowid=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXX&source=Other
 ```
 update: link jest nie potrzebny bo to funkcja premium :clown_face:
+- zainstalowany python
 
 ## Krotki opis dzialania (TL;DR)
 * apka pobiera dane z excela 
 * przetwarza je
 * tworzy plik csv, ktory bedzie uzywal power automate 
 * otwiera power automate
-* nawiguje do GUI
+* nawiguje po GUI
 * odpala flow na power automate
 * power automate wysyla maile bazujac na pliku csv (plik csv uzywa niestandardowego delimitera `, bo inaczej stopki sie pierdola)
 
@@ -62,9 +63,18 @@ pip install -r requirements.txt
 ```
 Od teraz kod powinien sie uruchamiac :))
 
+### python script do .exe
+zeby zrobic z tego apke w exe:
+trzeba uzyc pyinstallera
+
+```powershell
+pyinstaller --icon="PATH\TO\additional\icon.ico" --onefile --add-data "PATH\TO\additional\dance.gif;." --add-data "PATH\TO\additional\icon.ico;." --windowed '.\Wolny Piatek v3.py'
+```
+
 ### Struktura plikow
-- generalnie caly kod ktory cos robi jest w pliku 'Wolny Piatek v3.py', wiem ze nie powinno tak byc ale to jest moj kod i chuj mnnie obchodza konsekwencje
-- zeby kod zadziałał musi byc jeszcze plik config.py w ktorym znajduja sie zmienne: MAIL_BODY_SENSITIVE_DATA, PA_LINK, EXE_PATH, SUBJECT, SENDER, FOOTER, ktorych nie ma na githubie z przyczyn oczywistych (dane osobowe, numer telefonu itd), jesli nie wiesz co ma byc w tych zmiennych to pytania kierowac do sami wiecie kogo, nie do mnie
+- generalnie prawie caly kod ktory cos robi jest w pliku 'Wolny Piatek v3.py', wiem ze nie powinno tak byc ale to jest moj kod i chuj mnnie obchodza konsekwencje
+- niezbedny jest tez plik NIE_RUSZAC.py
+- zeby kod zadziałał musi byc jeszcze plik config.py w ktorym znajduja sie zmienne: MAIL_BODY_SENSITIVE_DATA, PA_LINK, PATH_GETTER_PATH, SUBJECT, SENDER, FOOTER, ktorych nie ma na githubie z przyczyn oczywistych (dane osobowe, numer telefonu itd), jesli nie wiesz co ma byc w tych zmiennych to pytania kierowac do sami wiecie kogo, nie do mnie
 - przed plikami warto dodawac: poniewaz czasem sie pierdola polskie znaki ale to wina raczej Outlooka niz pythona
 *   ```python
     # -*- coding: utf-8 -*-
@@ -75,13 +85,6 @@ Od teraz kod powinien sie uruchamiac :))
 
 update: zmienna PA_LINK jest niepotrzebna :slightly_smiling_face: , ale zostawiam moze kiedys to bedzie za free
 
-### python script do .exe
-zeby zrobic z tego apke w exe:
-trzeba uzyc pyinstallera
-
-```powershell
-pyinstaller --icon="PATH\TO\additional\icon.ico" --onefile --add-data "PATH\TO\additional\dance.gif;." --add-data "PATH\TO\additional\icon.ico;." --windowed '.\Wolny Piatek v3.py'
-```
 
 ### dlaczego tak a nie inaczej?
 otoz moi drodzy: 
@@ -95,7 +98,7 @@ otoz moi drodzy:
         1. znając etos pracy działu IT w tej firmie, nikomu nie chciałoby sie jej robic 
         2. nawet jezeli ktos by sie podjał, prawdopodonie aplikacje robiłby rafal ;) (nie działałoby)
 
-
+- dlaczego NIE_RUSZAC.py jest osobnym plikiem? po zrobieniu skryptu do execa, windows nie wpuszcza glob do windowsApps'ow bo to jakis folder chroniony czy cos, zmiana
 - dlaczego uzywac CSV a nie JSON, YAML, XML? na dzien dzisiejszy power automate w wersji za free wspiera tylko csv :upside_down_face:
 - dlaczego kod nie jest podzielony na osobne pliki? bo mi sie nie chciało, pozdrawiam
 - dlaczego nie uzywalem dekoratorow? jak wyzej
@@ -109,6 +112,7 @@ otoz moi drodzy:
 ## Adnotacje koncowe, uwagi
 * Szczegoly flow w folderze power_automate
 * flow musi byc pierwsze od góry
+* jesli nie działa nawigowanie po GUI w power automate to pewnie trzeba zmienic czas, bo prawdopodobnie nie da się wnioskowac tego dynamicznie
 * jesli kiedys zmieni sie GUI power automate to pewnie sie wszystko wywali
 * Jesli cos instalowales/as to na koniec:
 ```powershell
@@ -117,12 +121,13 @@ pip freeze > requirements.txt
 * Plik CSV uzywa niestandardowego delimitera "`" bo inaczej stopki sie psują, trzeba to tez zmienic na power automate'cie
 * Jesli po kliknieciu Send Mails przez usera, wystepuje lag, to normalne bo windows dlugo ustawia zmienne srodowiskowe
 * trzeba uzupełnic config_template.py i zmienic nazwe na config.py
+* nalezy zmienic lokalizacje pliku NIE_RUSZAC.py na wskazana w configu
 * jesli kiedykolwiek trigerowanie flow przez link byłoby za darmo, nalezy:
 1. odkomentowac tę linie:
 ```python
 #webbrowser.open(PA_LINK)           #only on premium -_-
 ```
-2. zakomentowac nastepne linie 
+2. zakomentowac nastepne linie
 3. odrobine zmienic manual
 
 ## Raportowanie bledow, zglaszanie reklamacji itd.

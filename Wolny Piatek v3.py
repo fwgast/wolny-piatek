@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK
+from config import SUBJECT, SENDER, BODY_SENSITIVE_DATA, FOOTER, PA_LINK, PATH_GETTER_PATH
 import csv
 import sys, os, subprocess
 from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QLabel, QPushButton, QWidget, QFileDialog, QMessageBox, QVBoxLayout
@@ -10,14 +10,17 @@ import openpyxl
 import pygetwindow as gw
 import pyautogui
 import time
-import logging, glob
-logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
-power_automate_path = os.path.join(os.environ['ProgramFiles'], 'WindowsApps', 'Microsoft.PowerAutomateDesktop_*', 'PAD.Console.Host.exe')
-EXE_PATH = glob.glob(power_automate_path)
-print(EXE_PATH)
-logging.debug(os.environ['ProgramFiles'])
-logging.debug(os.path.join(os.environ['ProgramFiles'], 'WindowsApps', 'Microsoft.PowerAutomateDesktop_*', 'PAD.Console.Host.exe'))
+
+
+result = subprocess.run(['python', PATH_GETTER_PATH], 
+                        stdout=subprocess.PIPE, 
+                        stderr=subprocess.PIPE, 
+                        text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+
+EXE_PATH = result.stderr.strip()
+EXE_PATH = EXE_PATH.strip("[]").replace("'", "").strip()
+
 
 def get_application_path():
     if getattr(sys, 'frozen', False):
@@ -266,14 +269,11 @@ class EmailAutomationApp(QMainWindow):
 
 
     def power_automate(self):
-        logging.debug('wlaczanie')
         try:
-            logging.debug(EXE_PATH)
             subprocess.Popen(EXE_PATH)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while starting the process: {e}")
 
-        logging.debug('wlaczone')
 
         while True:
             try:
@@ -282,23 +282,22 @@ class EmailAutomationApp(QMainWindow):
             except IndexError:
                 time.sleep(0.2)
 
-        logging.debug('zaraz resize')
 
         window.resizeTo(200, 200)
         window.activate()
-        time.sleep(10)
+        time.sleep(15)
         pyautogui.click(window.left + 233, window.top + 148)
-        time.sleep(1)
+        time.sleep(2)
         pyautogui.click(window.left + 252, window.top + 293)
-        time.sleep(0.5)
+        time.sleep(2)
         pyautogui.click(window.left + 252, window.top + 293)
 
     def kill_power_automate(self):
-        logging.debug('kill')
         try:
-            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True)
-        except Exception:
+            subprocess.run(["taskkill", "/F", "/IM", "PAD.Console.Host.exe"],stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        except Exception as e:
             pass
+
 
     def wait_until_flow_ends(self):
         while True:
@@ -315,6 +314,7 @@ class EmailAutomationApp(QMainWindow):
         self.kill_power_automate()
         self.power_automate()
         self.wait_until_flow_ends()
+        time.sleep(1)
         self.kill_power_automate()
 
 

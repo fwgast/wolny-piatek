@@ -2,6 +2,7 @@ config.py
 test.py
 .venv/
 dane_testowe/
+*.ps1
 .venv
 __pycache__
 missing_documents.csv
